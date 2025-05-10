@@ -46,6 +46,7 @@
 
 // Remote notifications
 - (void)getId:(CDVInvokedUrlCommand*)command;
+- (void)getAnalyticsId:(CDVInvokedUrlCommand*)command;
 - (void)getToken:(CDVInvokedUrlCommand*)command;
 - (void)getAPNSToken:(CDVInvokedUrlCommand*)command;
 - (NSString *)hexadecimalStringFromData:(NSData *)data;

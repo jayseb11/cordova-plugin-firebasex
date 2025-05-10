@@ -29,6 +29,10 @@ export interface FirebasePlugin {
         success: (value: string) => void,
         error: (err: string) => void
     ): void
+    getAnalyticsId(
+        success: (value: string) => void,
+        error: (err: string) => void
+    ): void
     getToken(
         success: (value: string) => void,
         error: (err: string) => void

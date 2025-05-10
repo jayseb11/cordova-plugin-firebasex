@@ -588,6 +588,10 @@ exports.getId = function (success, error) {
     exec(success, error, "FirebasePlugin", "getId", []);
 };
 
+exports.getAnalyticsId = function (success, error) {
+    exec(success, error, "FirebasePlugin", "getAnalyticsId", []);
+};
+
 exports.getInstallationId = function (success, error) {
     exec(success, error, "FirebasePlugin", "getInstallationId", []);
 };

@@ -2666,6 +2666,29 @@ static NSMutableArray* pendingGlobalJS = nil;
     }];
 }
 
+- (void) getAnalyticsId:(CDVInvokedUrlCommand*)command {
+    [self.commandDelegate runInBackground:^{
+        @try {
+            NSString *appInstanceId = [FIRAnalytics appInstanceID];
+            if (appInstanceId != nil) {
+                [self sendPluginStringResult:appInstanceId command:command callbackId:command.callbackId];
+            } else {
+                // If the ID is not immediately available, try to get it asynchronously
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    NSString *delayedAppInstanceId = [FIRAnalytics appInstanceID];
+                    if (delayedAppInstanceId != nil) {
+                        [self sendPluginStringResult:delayedAppInstanceId command:command callbackId:command.callbackId];
+                    } else {
+                        [self sendPluginErrorWithMessage:@"Failed to retrieve Analytics App Instance ID" :command];
+                    }
+                });
+            }
+        }@catch (NSException *exception) {
+            [self handlePluginExceptionWithContext:exception :command];
+        }
+    }];
+}
+
 - (void) getInstallationToken:(CDVInvokedUrlCommand*)command {
     [self.commandDelegate runInBackground:^{
         @try {

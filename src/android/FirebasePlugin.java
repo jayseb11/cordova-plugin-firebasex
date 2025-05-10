@@ -297,6 +297,9 @@ public class FirebasePlugin extends CordovaPlugin {
                 case "getToken":
                     this.getToken(args, callbackContext);
                     break;
+                case "getAnalyticsId":
+                    this.getAnalyticsId(args, callbackContext);
+                    break;
                 case "hasPermission":
                     this.hasPermission(callbackContext);
                     break;
@@ -3700,6 +3703,29 @@ public class FirebasePlugin extends CordovaPlugin {
             public void run() {
                 try {
                     handleTaskOutcomeWithStringResult(FirebaseInstallations.getInstance().getId(), callbackContext);
+                } catch (Exception e) {
+                    handleExceptionWithContext(e, callbackContext);
+                }
+            }
+        });
+    }
+
+    private void getAnalyticsId(JSONArray args, CallbackContext callbackContext) throws JSONException {
+        cordova.getThreadPool().execute(new Runnable() {
+            public void run() {
+                try {
+                    Task<String> task = mFirebaseAnalytics.getAppInstanceId();
+                    task.addOnSuccessListener(new OnSuccessListener<String>() {
+                        @Override
+                        public void onSuccess(String appInstanceId) {
+                            callbackContext.success(appInstanceId);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            handleExceptionWithContext(e, callbackContext);
+                        }
+                    });
                 } catch (Exception e) {
                     handleExceptionWithContext(e, callbackContext);
                 }
